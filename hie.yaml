@@ -1,0 +1,10 @@
+cradle:
+  cabal:
+    - path: "./src"
+      component: "lib:prim-ord"
+
+dependencies:
+  - prim-ord.cabal
+  - default.nix
+  - shell.nix
+  - .hlint.yaml
