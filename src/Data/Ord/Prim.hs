@@ -19,8 +19,10 @@
 module Data.Ord.Prim
   ( -- * Ordering#
     Ordering# (EQ#, GT#, LT#),
-    fromOrdering#,
-    toOrdering#,
+    fromOrdering,
+    toOrdering,
+    toInt#,
+    unsafeFromInt#,
 
     -- * Eq#
     Eq# ((==#), (/=#)),
@@ -108,14 +110,26 @@ instance Ord# Ordering# where
 -- | TODO
 --
 -- @since 1.0.0
-fromOrdering# :: Ordering# -> Ordering
-fromOrdering# (Ordering# x#) = GHC.tagToEnum# (1# GHC.+# x#)
+fromOrdering :: Ordering -> Ordering#
+fromOrdering x = Ordering# (GHC.dataToTag# x GHC.-# 1#)
 
 -- | TODO
 --
 -- @since 1.0.0
-toOrdering# :: Ordering -> Ordering#
-toOrdering# x = Ordering# (GHC.dataToTag# x GHC.-# 1#)
+toOrdering :: Ordering# -> Ordering
+toOrdering (Ordering# x#) = GHC.tagToEnum# (1# GHC.+# x#)
+
+-- | TODO
+--
+-- @since 1.0.0
+toInt# :: Ordering# -> Int# 
+toInt# (Ordering# x#) = x#
+
+-- | TODO
+--
+-- @since 1.0.0
+unsafeFromInt# :: Int# -> Ordering# 
+unsafeFromInt# = Ordering#
 
 -- Eq# -------------------------------------------------------------------------
 
