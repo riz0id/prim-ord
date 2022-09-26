@@ -32,11 +32,12 @@ module Data.Ord.Prim
   )
 where
 
-import Data.Bool.Prim (Bool#)
+import Data.Bool.Prim (Bool# (F#, T#))
 import Data.Bool.Prim qualified as Bool
 
 import GHC.Exts
   ( Addr#,
+    ByteArray#,
     Char#,
     Double#,
     Float#,
@@ -122,13 +123,13 @@ toOrdering (Ordering# x#) = GHC.tagToEnum# (1# GHC.+# x#)
 -- | TODO
 --
 -- @since 1.0.0
-toInt# :: Ordering# -> Int# 
+toInt# :: Ordering# -> Int#
 toInt# (Ordering# x#) = x#
 
 -- | TODO
 --
 -- @since 1.0.0
-unsafeFromInt# :: Int# -> Ordering# 
+unsafeFromInt# :: Int# -> Ordering#
 unsafeFromInt# = Ordering#
 
 -- Eq# -------------------------------------------------------------------------
@@ -167,6 +168,16 @@ instance Eq# Bool# where
   {-# INLINE (==#) #-}
 
   x# /=# y# = Bool.ne# x# y#
+  {-# INLINE (/=#) #-}
+
+-- Eq# - ByteArray# ------------------------------------------------------------
+
+-- | @since 1.0.0
+instance Eq# ByteArray# where
+  xs# ==# ys# = compare# xs# ys# ==# EQ#
+  {-# INLINE (==#) #-}
+
+  xs# /=# ys# = compare# xs# ys# /=# EQ#
   {-# INLINE (/=#) #-}
 
 -- Eq# - Char# -----------------------------------------------------------------
@@ -334,6 +345,42 @@ instance Ord# Bool# where
   {-# INLINE (<#) #-}
 
   x# <=# y# = Bool.le# x# y#
+  {-# INLINE (<=#) #-}
+
+-- Eq# - ByteArray# ------------------------------------------------------------
+
+-- | @since 1.0.0
+instance Ord# ByteArray# where
+  compare# xs# ys# = 
+    let ptr'xs# = GHC.byteArrayContents# xs#
+        ptr'ys# = GHC.byteArrayContents# ys#
+     in case ptr'xs# ==# ptr'ys# of 
+      T# -> EQ# 
+      _ -> 
+        let size'xs# = GHC.sizeofByteArray# xs#
+            size'ys# = GHC.sizeofByteArray# ys#
+         in case compare# size'xs# size'ys# of 
+              EQ# -> unsafeFromInt# (GHC.compareByteArrays# xs# 0# ys# 0# size'xs#)
+              GT# -> GT#
+              LT# -> LT#
+  {-# INLINE compare# #-}
+
+  xs# ># ys# = compare# xs# ys# ==# GT#
+  {-# INLINE (>#) #-}
+  
+  xs# >=# ys# = 
+    let order# :: Ordering# 
+        order# = compare# xs# ys#
+     in Bool.or# (order# ==# GT#) (order# ==# EQ#)
+  {-# INLINE (>=#) #-}
+
+  xs# <# ys# = compare# xs# ys# ==# LT#
+  {-# INLINE (<#) #-}
+  
+  xs# <=# ys# = 
+    let order# :: Ordering# 
+        order# = compare# xs# ys#
+     in Bool.or# (order# ==# LT#) (order# ==# EQ#)
   {-# INLINE (<=#) #-}
 
 -- Ord# - Char# ----------------------------------------------------------------
