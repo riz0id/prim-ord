@@ -1,17 +1,18 @@
-{ ghc ? "ghc922" }:
+{ ghc }:
 
-let
-  nixpkgs = import ./nixpkgs.nix { };
-in import nixpkgs {
+import (import ./nixpkgs.nix) {
   config.packageOverrides = pkgs: 
     pkgs.lib.composeManyExtensions [  
-      (import extensions/prim-bool.nix {
+      (import exts/prim-bool.nix {
         inherit ghc;
       })
-      (import extensions/prim-compat.nix {
+      (import exts/prim-compat.nix {
         inherit ghc;
       })
-      (import extensions/prim-ord.nix {
+      (import exts/prim-ord.nix {
+        inherit ghc;
+      })
+      (import exts/text.nix {
         inherit ghc;
       })
     ] pkgs pkgs;
