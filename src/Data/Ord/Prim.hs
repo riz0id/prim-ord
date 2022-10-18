@@ -32,12 +32,11 @@ module Data.Ord.Prim
   )
 where
 
-import Data.Bool.Prim (Bool# (F#, T#))
+import Data.Bool.Prim (Bool#)
 import Data.Bool.Prim qualified as Bool
 
 import GHC.Exts
   ( Addr#,
-    ByteArray#,
     Char#,
     Double#,
     Float#,
