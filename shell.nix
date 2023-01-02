@@ -6,7 +6,5 @@ let
   };
 in pkgs.prim-ord.env.overrideAttrs (self: {
   buildInputs = self.buildInputs ++ [ 
-    pkgs.clang
-    pkgs.llvm
   ];
 })

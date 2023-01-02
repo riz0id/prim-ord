@@ -20,6 +20,8 @@ extra-source-files:
 
 tested-with:
   GHC == 9.2.2
+  GHC == 9.2.4
+  GHC == 9.4.2
 
 source-repository head
   type:     git
@@ -47,7 +49,7 @@ common common
     ghc-options: -fllvm 
 
   build-depends:
-    , base >= 4.15.1 && < 4.17
+    , base >= 4.15.1 && < 4.18
 
 library
   import:         common
@@ -69,10 +71,10 @@ library
     -fmax-simplifier-iterations=4
 
   build-depends:
-    , ghc-prim         >= 0.7.0  && < 0.9
-    , prim-bool        >= 1.0.1  && < 1.1.0
+    , ghc-prim         >= 0.7.0  && < 0.10
+    , prim-bool        >= 1.0.0  && < 1.1.0
     , prim-compat      >= 1.0.0  && < 1.1.0
-    , template-haskell >= 2.17.0 && < 2.19
+    , template-haskell >= 2.17.0 && < 2.20
 
   exposed-modules:
     Data.Ord.Prim
