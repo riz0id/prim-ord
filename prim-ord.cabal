@@ -3,8 +3,8 @@ cabal-version: 2.4
 name:        prim-ord
 category:    Data
 version:     1.0.0
-synopsis:    TODO 
-description: TODO 
+synopsis:    TODO
+description: TODO
 
 author:       jacob leach
 maintainer:   jacobleach@protonmail.com
@@ -45,36 +45,36 @@ common common
     -Widentities
     -Wmissing-export-lists
 
-  if flag(llvm) 
-    ghc-options: -fllvm 
+  if flag(llvm)
+    ghc-options: -fllvm
 
   build-depends:
-    , base >= 4.15.1 && < 4.18
+    , base >= 4.15.1 && < 4.20
 
 library
   import:         common
   hs-source-dirs: src
 
   ghc-options:
-    -- `-j1` is set (as opposed to `-j`) because this package only exports one 
+    -- `-j1` is set (as opposed to `-j`) because this package only exports one
     -- module.
     -j1
 
-    -- `-O` is explicitly set since none of the functions exported by this 
-    -- library would benefit from higher optimization levels. This helps reduce 
-    -- compile times. 
+    -- `-O` is explicitly set since none of the functions exported by this
+    -- library would benefit from higher optimization levels. This helps reduce
+    -- compile times.
     -O
 
-    -- `-fmax-simplifier-iterations` is set to keep compile times in check. 
-    -- The functions in this library are simple and do not need very many 
+    -- `-fmax-simplifier-iterations` is set to keep compile times in check.
+    -- The functions in this library are simple and do not need very many
     -- simplifier passes.
     -fmax-simplifier-iterations=4
 
   build-depends:
-    , ghc-prim         >= 0.7.0  && < 0.10
+    , ghc-prim         >= 0.7.0  && < 0.12
     , prim-bool        >= 1.0.0  && < 1.1.0
     , prim-compat      >= 1.0.0  && < 1.1.0
-    , template-haskell >= 2.17.0 && < 2.20
+    , template-haskell >= 2.17.0 && < 2.22
 
   exposed-modules:
     Data.Ord.Prim
